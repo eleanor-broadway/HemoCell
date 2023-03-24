@@ -31,11 +31,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Misc utils ---------------------------
 
-inline double max (double a, double b) {
+inline double maxHC (double a, double b) {
 	return (a >= b) ? a : b;
 }
 
-inline double min (double a, double b) {
+inline double minHC (double a, double b) {
 	return (a <= b) ? a : b;
 }
 
