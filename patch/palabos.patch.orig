@@ -53,6 +53,23 @@ index 05bd9a0..6ce0c00 100644
  public:
      static CachePolicy3D& cachePolicy();
      template<typename T_, template<typename U_> class Descriptor_>
+@@ -218,6 +218,16 @@ public:
+     friend class OnLinkExternalRhoJcollideAndStream3D;
+     template<typename T_, template<typename U_> class Descriptor_>
+     friend class GrayScaleCollideAndStream3D;
++    template<typename T_, template<typename U_> class Descriptor_>
++    friend class ImplicitGrid3D;
++};
++
++template<typename T, template<typename U> class Descriptor>
++struct ImplicitGrid3D {
++        BlockLattice3D<T,Descriptor>& parent;
++        ImplicitGrid3D(BlockLattice3D<T,Descriptor>& parent_);
++        const Cell<T,Descriptor> & operator () (int x,int y,int z) const;
++        Cell<T,Descriptor> & operator () (int x,int y,int z);
+ };
+ 
+ template<typename T, template<typename U> class Descriptor>
 diff --git a/src/atomicBlock/blockLattice3D.hh b/src/atomicBlock/blockLattice3D.hh
 index 815b086..1254c8e 100644
 --- a/src/atomicBlock/blockLattice3D.hh
