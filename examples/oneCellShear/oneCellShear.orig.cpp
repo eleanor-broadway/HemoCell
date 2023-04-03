@@ -1,8 +1,8 @@
 /*
 This file is part of the HemoCell library
 
-HemoCell is developed and maintained by the Computational Science Lab 
-in the University of Amsterdam. Any questions or remarks regarding this library 
+HemoCell is developed and maintained by the Computational Science Lab
+in the University of Amsterdam. Any questions or remarks regarding this library
 can be sent to: info@hemocell.eu
 
 When using the HemoCell library in scientific work please cite the
@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using namespace hemo;
 
 int main(int argc, char* argv[])
-{   
+{
 	if(argc < 2)
 	{
 			cout << "Usage: " << argv[0] << " <configuration.xml>" << endl;
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	HemoCell hemocell(argv[1], argc, argv);
 	Config * cfg = hemocell.cfg;
 
-	
+
 
 
 // ----------------- Read in config file & calc. LBM parameters ---------------------------
@@ -80,10 +80,10 @@ int main(int argc, char* argv[])
   hemocell.outputInSiUnits = true;
 
 	// ----------------------- Init cell models --------------------------
-	
+
 	hemocell.initializeCellfield();
 	hemocell.addCellType<RbcHighOrderModel>("RBC", RBC_FROM_SPHERE);
-	vector<int> outputs = {OUTPUT_POSITION,OUTPUT_TRIANGLES,OUTPUT_FORCE,OUTPUT_FORCE_VOLUME,OUTPUT_FORCE_BENDING,OUTPUT_FORCE_LINK,OUTPUT_FORCE_AREA, OUTPUT_FORCE_VISC}; 
+	vector<int> outputs = {OUTPUT_POSITION,OUTPUT_TRIANGLES,OUTPUT_FORCE,OUTPUT_FORCE_VOLUME,OUTPUT_FORCE_BENDING,OUTPUT_FORCE_LINK,OUTPUT_FORCE_AREA, OUTPUT_FORCE_VISC};
 	hemocell.setOutputs("RBC", outputs);
 
 	outputs = {OUTPUT_VELOCITY};
@@ -101,11 +101,11 @@ int main(int argc, char* argv[])
   }
 
 
-  if (hemocell.iter == 0) { 
-    pcout << "(OneCellShear) fresh start: warming up cell-free fluid domain for "  << (*cfg)["parameters"]["warmup"].read<plint>() << " iterations..." << endl; 
-    for (plint itrt = 0; itrt < (*cfg)["parameters"]["warmup"].read<plint>(); ++itrt) {  
-      hemocell.lattice->collideAndStream();  
-    } 
+  if (hemocell.iter == 0) {
+    pcout << "(OneCellShear) fresh start: warming up cell-free fluid domain for "  << (*cfg)["parameters"]["warmup"].read<plint>() << " iterations..." << endl;
+    for (plint itrt = 0; itrt < (*cfg)["parameters"]["warmup"].read<plint>(); ++itrt) {
+      hemocell.lattice->collideAndStream();
+    }
   }
 
   pcout << "(OneCellShea) Shear rate: " << (*cfg)["domain"]["shearrate"].read<T>() << " s^-1." << endl;
@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
 
 
   while (hemocell.iter < tmax ) {
-    
+
     hemocell.iterate();
 
     if (hemocell.iter % tmeas == 0) {
@@ -152,7 +152,7 @@ int main(int argc, char* argv[])
       T rel_D2 = (largest_diam/D0)*(largest_diam/D0);
       T def_idx = (rel_D2 - 1.0) / (rel_D2 + 1.0) * 100.0;
 
-      pcout << "\t Cell center at: {" <<position[0]<<","<<position[1]<<","<<position[2] << "} µm" << endl;  
+      pcout << "\t Cell center at: {" <<position[0]<<","<<position[1]<<","<<position[2] << "} µm" << endl;
       pcout << "\t Diameters: {" << bbox[1]-bbox[0] <<", " << bbox[3]-bbox[2] <<", " << bbox[5]-bbox[4] <<"}  µm" << endl;
       pcout << "\t Surface: " << surface << " µm^2" << " (" << surface / surface_eq * 100.0 << "%)" << "  Volume: " << volume << " µm^3" << " (" << volume / volume_eq * 100.0 << "%)"<< endl;
       pcout << "\t Largest diameter: " << largest_diam << " µm." << endl;
