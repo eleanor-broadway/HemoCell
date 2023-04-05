@@ -25,10 +25,6 @@ cd hdf5-1.12.0/
 export LDFLAGS=-fPIC
 export FCFLAGS=-fPIC
 ./configure --prefix=/home/eleanor/hdf5parallel --enable-parallel --enable-fortran --enable-build-mode=production
-
-Does this
-
---LDFLAGS=-fPIC
 ```
 
 Edit the ./fortran/testpar/ptest.f90 file: Delete the line that reads USE MPI and add INCLUDE "mpif.h" immediately after the IMPLICIT NONE statement.
