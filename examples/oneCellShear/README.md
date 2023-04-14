@@ -9,6 +9,19 @@ This directory contains:
 * A secondary development test case. This includes the stripped test case with the full HemoCell set-up restored. Logic for porting applications: do set-up as usual but use the accelerated lattice for compute. When ran, this gives the same error as the "first" development test case. 
 
 
+Current status: 
+----------------
+
+The test case has been restored to the full HemoCell test. Currently see an "error" from Palabos about sections of the collision model not being ported. However, the simultation continues onto the compute. 
+
+If we use ```hemocell.acciterate``` (newly implemented to attempt to use the acceleratedLattice) we get a segmentation fault. But simply using ```collideAndStream()``` within the test case is fine and runs. 
+
+Things to look at: 
+* The removed line in ```oneCellShear.cpp```. 
+* The removed line in ```hemoCell.cpp```.
+* Restoring the contents of ```hemocell.acciterate``` into the test case. Perhaps, could test the implementation with "MultiBlockLattice3D" in the CPU version to make sure this is as expected? 
+
+
 Re-compile on Cirrus
 --------------------
 
