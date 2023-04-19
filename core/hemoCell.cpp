@@ -376,7 +376,7 @@ void HemoCell::iterate() {
 }
 
 
-
+// Created for the accelerated lattice
 void HemoCell::acciterate(plb::AcceleratedLattice3D<T,DESCRIPTOR>* acclattice) {
   checkExitSignals();
   if (!sanityCheckDone) {
@@ -395,7 +395,10 @@ void HemoCell::acciterate(plb::AcceleratedLattice3D<T,DESCRIPTOR>* acclattice) {
 
   // #### 2 #### LBM
   global.statistics.getCurrent()["collideAndStream"].start();
+
+  // Updated for the accelerated lattice 
   acclattice->collideAndStream();
+  
   global.statistics.getCurrent().stop();
 
   if (global.enableCEPACfield)
