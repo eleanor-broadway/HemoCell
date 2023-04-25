@@ -452,11 +452,9 @@ void HemoCell::acciterate(plb::AcceleratedLattice3D<T,DESCRIPTOR>* acclattice) {
   // Reset Forces on the lattice, TODO do own efficient implementation
 
 
-  // CURRENTLY REMOVED for development...
-
-  // setExternalVector(acclattice, acclattice->getBoundingBox(),
-  //         DESCRIPTOR<T>::ExternalField::forceBeginsAt,
-  //         plb::Array<T, DESCRIPTOR<T>::d>(0.0, 0.0, 0.0));
+  setExternalVector(*lattice, (*lattice).getBoundingBox(),
+           DESCRIPTOR<T>::ExternalField::forceBeginsAt,
+           plb::Array<T, DESCRIPTOR<T>::d>(0.0, 0.0, 0.0));
 
   global.statistics.getCurrent().stop();
 
