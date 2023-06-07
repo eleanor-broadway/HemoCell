@@ -37,8 +37,8 @@ using namespace hemo;
 int main(int argc, char* argv[])
 {
 
-	// Init the Palabos stuff 
-	plbInit(&argc, &argv);
+	// Init the Palabos stuff
+	// plbInit(&argc, &argv);
 	defaultMultiBlockPolicy3D().toggleBlockingCommunication(true);
 
 
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 	pcout << "(CellStretch) Initializing lattice: " << nx <<"x" << ny <<"x" << nz << " [lu]" << std::endl;
 	plint extendedEnvelopeWidth = 2;  // Because we might use ibmKernel with with 2.
 
-	// LOG of adding the hemocell.lattice back in... 
+	// LOG of adding the hemocell.lattice back in...
 	// Assignment of the lattice, working in the stipped test case
 	// MultiBlockLattice3D<T,DESCRIPTOR> lattice(nx,ny,nz, new GuoExternalForceBGKdynamics<T, DESCRIPTOR>(1.0/param::tau) );
 
@@ -89,41 +89,41 @@ int main(int argc, char* argv[])
 	OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition = createLocalBoundaryCondition3D<T,DESCRIPTOR>();
 	hemocell.lattice->toggleInternalStatistics(false);
 
-	// This is the line which causes the "ERROR: Model "Boundary_RegularizedVelocity_2_-1 >> BGK_ExternalForce_Guo" not implemented." to appear. 
+	// This is the line which causes the "ERROR: Model "Boundary_RegularizedVelocity_2_-1 >> BGK_ExternalForce_Guo" not implemented." to appear.
 	// It then segmentation faults and exits. Found in helper/hemocellInit.hh
 	//iniLatticeSquareCouette(*hemocell.lattice, nx, ny, nz, *boundaryCondition, param::shearrate_lbm);
 
-	// Inlining... 
+	// Inlining...
 
 	plb::Box3D top = plb::Box3D(0, nx-1, 0, ny-1, nz-1, nz-1);
 	plb::Box3D bottom = plb::Box3D(0, nx-1, 0, ny-1, 0, 0);
 
 	hemocell.lattice->periodicity().toggle(0, true);
-  	hemocell.lattice->periodicity().toggle(1, true);
-  	hemocell.lattice->periodicity().toggle(2, false);
+  hemocell.lattice->periodicity().toggle(1, true);
+  hemocell.lattice->periodicity().toggle(2, false);
 
 	// When these lines are added we see the "ERROR: Model" lines but it continues on to the compute
 	boundaryCondition->setVelocityConditionOnBlockBoundaries(*hemocell.lattice, top);
-  	boundaryCondition->setVelocityConditionOnBlockBoundaries(*hemocell.lattice, bottom);
+  boundaryCondition->setVelocityConditionOnBlockBoundaries(*hemocell.lattice, bottom);
 
 	T vHalf = (nz-1)*param::shearrate_lbm*0.5;
-  	setBoundaryVelocity(*hemocell.lattice, top, plb::Array<T,3>(-vHalf,0.0,0.0));
-  	setBoundaryVelocity(*hemocell.lattice, bottom, plb::Array<T,3>(vHalf,0.0,0.0));
+  setBoundaryVelocity(*hemocell.lattice, top, plb::Array<T,3>(-vHalf,0.0,0.0));
+  setBoundaryVelocity(*hemocell.lattice, bottom, plb::Array<T,3>(vHalf,0.0,0.0));
 
 	// This line still goes on to the compute (i.e. no memory error)
 	setExternalVector(*hemocell.lattice, hemocell.lattice->getBoundingBox(),DESCRIPTOR<T>::ExternalField::forceBeginsAt, plb::Array<T,DESCRIPTOR<T>::d>(0.0,0.0,0.0));
 
 
 	// NOW create the AccelerateLattice and assign
-  	AcceleratedLattice3D<T, DESCRIPTOR>* accLattice = nullptr;
+	AcceleratedLattice3D<T, DESCRIPTOR>* accLattice = nullptr;
 	accLattice = new AcceleratedLattice3D<T, DESCRIPTOR>(*hemocell.lattice);
 
-	// Changed "." to "->"
 	accLattice->initialize();
+	hemocell.lattice->initialize();
 	// END of iniLatticeSquareCouette
 
 	// This is done twice...
-	accLattice->initialize();
+	// hemocell.lattice->initialize();
 	hemocell.outputInSiUnits = true;
 
 
@@ -159,38 +159,43 @@ int main(int argc, char* argv[])
 	pcout << "(OneCellShea) Shear rate: " << (*cfg)["domain"]["shearrate"].read<T>() << " s^-1." << endl;
 
 	unsigned int tmax = (*cfg)["sim"]["tmax"].read<unsigned int>();
-  	unsigned int tmeas = (*cfg)["sim"]["tmeas"].read<unsigned int>();
-  	unsigned int tcheckpoint = (*cfg)["sim"]["tcheckpoint"].read<unsigned int>();
+  unsigned int tmeas = (*cfg)["sim"]["tmeas"].read<unsigned int>();
+  unsigned int tcheckpoint = (*cfg)["sim"]["tcheckpoint"].read<unsigned int>();
 
-  	// Get undeformed cell values
-  	CellInformationFunctionals::calculateCellVolume(&hemocell);
-  	CellInformationFunctionals::calculateCellArea(&hemocell);
-  	T volume_eq = (CellInformationFunctionals::info_per_cell[0].volume)/pow(1e-6/param::dx,3);
-  	T surface_eq = (CellInformationFunctionals::info_per_cell[0].area)/pow(1e-6/param::dx,2);
+	// Get undeformed cell values
+	CellInformationFunctionals::calculateCellVolume(&hemocell);
+	CellInformationFunctionals::calculateCellArea(&hemocell);
+	T volume_eq = (CellInformationFunctionals::info_per_cell[0].volume)/pow(1e-6/param::dx,3);
+	T surface_eq = (CellInformationFunctionals::info_per_cell[0].area)/pow(1e-6/param::dx,2);
 
-  	T D0 = 2.0 * (*cfg)["ibm"]["radius"].read<T>() * 1e6;
+	T D0 = 2.0 * (*cfg)["ibm"]["radius"].read<T>() * 1e6;
 
-  	// Creating output log file
-  	plb_ofstream fOut;
-  	if(cfg->checkpointed)
-   		 fOut.open("stretch.log", std::ofstream::app);
-  	else
-    	fOut.open("stretch.log");
+	// Creating output log file
+	plb_ofstream fOut;
+	if(cfg->checkpointed)
+ 		 fOut.open("stretch.log", std::ofstream::app);
+	else
+  	fOut.open("stretch.log");
 
 
 	// ----------------------------------- Compute -----------------------------------
 
 	while (hemocell.iter < tmax) {
-		// Using new acciterate, created for the accelerated lattice 
+		// Using new acciterate, created for the accelerated lattice
 		hemocell.acciterate(accLattice);
+		// accLattice -> collideAndStream(): 
 
-	// This is how we were previously testing... 
+
+	// This is how we were previously testing...
 	// for (int ijk = 0; ijk < tmax; ijk++) {
 	// 		accLattice -> collideAndStream();
-	//	if (hemocell.iter % tmeas == 0) {
-  	//		pcout << hemocell.iter << endl;
-	//	}
+
+		if (hemocell.iter % tmeas == 0) {
+				pcout << hemocell.iter << endl;
+		}
 	}
+
+  fOut.close();
 
   pcout << "(OneCellShear) Simulation finished :)" << std::endl;
   return 0;
