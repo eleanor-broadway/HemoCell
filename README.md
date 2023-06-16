@@ -6,8 +6,8 @@
           HighpErformance MicrOscopic CELlular Library
 
 
-**Note**
-Please switch to the `dev` branch to view the development of the HemoCell port to GPUs. 
+> **Note**
+> Please switch to the `dev` branch to view the development of the HemoCell port to GPUs.
 
 
 About HemoCell
