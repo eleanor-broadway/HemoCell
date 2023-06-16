@@ -1,9 +1,13 @@
      _   _   ____   __  __   _____    ___   ____   __     __   
     ( )_( ) ( ___) (  \/  ) (  _  )  / __) ( ___) (  )   (  )  
-     ) _ (   )__)   )    (   )(_)(  ( (__   )__)   )(__   )(__ 
+     ) _ (   )__)   )    (   )(_)(  ( (__   )__)   )(__   )(__
     (_) (_) (____) (_/\/\_) (_____)  \___) (____) (____) (____)   
-    
+
           HighpErformance MicrOscopic CELlular Library
+
+
+**Note**
+Please switch to the `dev` branch to view the development of the HemoCell port to GPUs. 
 
 
 About HemoCell
@@ -22,4 +26,4 @@ on [hemocell.eu](https://hemocell.eu/user_guide).
 License
 =======
 
-Please see the file `LICENSE` in the root directory. 
+Please see the file `LICENSE` in the root directory.
