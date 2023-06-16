@@ -1,9 +1,18 @@
      _   _   ____   __  __   _____    ___   ____   __     __   
     ( )_( ) ( ___) (  \/  ) (  _  )  / __) ( ___) (  )   (  )  
-     ) _ (   )__)   )    (   )(_)(  ( (__   )__)   )(__   )(__ 
+     ) _ (   )__)   )    (   )(_)(  ( (__   )__)   )(__   )(__
     (_) (_) (____) (_/\/\_) (_____)  \___) (____) (____) (____)   
-    
+
           HighpErformance MicrOscopic CELlular Library
+
+
+About the HemoCell GPU Port
+============================
+
+This branch is used for tracking the HemoCell port to GPUs.
+Recently, Palabos has received a GPU backend which allows existing programs to run in multi-GPU environments with small modifications. This branch contains the efforts to use the Palabos GPU backend to port HemoCell to GPU architectures.
+
+The development branch of Palabos can be found [`here`](https://gitlab.com/eleanorb/palabos-hybrid-hemo-cell). 
 
 
 About HemoCell
@@ -22,4 +31,4 @@ on [hemocell.eu](https://hemocell.eu/user_guide).
 License
 =======
 
-Please see the file `LICENSE` in the root directory. 
+Please see the file `LICENSE` in the root directory.
